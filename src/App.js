@@ -1,5 +1,3 @@
-import './App.css';
-
 import WordBookApp from './wordBook/App';
 
 function App() {

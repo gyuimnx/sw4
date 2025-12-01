@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './Chapter.css';
 import ListChapter from "../ListChapter/ListChapter";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../../api";
 
 function Chapter() {
@@ -9,8 +9,8 @@ function Chapter() {
     const [newChapter, setNewChapter] = useState(''); // 새 챕터
     const [createOpen, setCreateOpen] = useState(false); // 새 챕터 만들기 눌렀는가?
 
-    const navigate = useNavigate();
-    const username = localStorage.getItem('username');
+    // const navigate = useNavigate();
+    // const username = localStorage.getItem('username');
 
     // 챕터 목록 조회(DB에서 가져옴)
     const fetchChapters = async () => {
@@ -108,11 +108,11 @@ function Chapter() {
         }
     }
 
-    const handleLogout = () => {
-        localStorage.removeItem('userToken'); // 토큰 제거하고
-        localStorage.removeItem('username');
-        navigate('/Login'); // 로그인 페이지로 이동
-    };
+    // const handleLogout = () => {
+    //     localStorage.removeItem('userToken'); // 토큰 제거하고
+    //     localStorage.removeItem('username');
+    //     navigate('/Login'); // 로그인 페이지로 이동
+    // };
 
     // 퀴즈 버튼 클릭 시 실행할 함수
     const handleQuizClick = (e) => {
@@ -123,12 +123,7 @@ function Chapter() {
     return (
         <div className="Chapter">
             <h1 className="Header">
-                <button
-                    className="LogoutBtn"
-                    onClick={handleLogout}
-                >
-                    로그아웃 ({username})
-                </button>
+
                 <div className="VOCA">VOCA</div>
                 <button
                     className="CreateBtn"

@@ -58,25 +58,6 @@
     transform: translateY(-1px);
 }
 
-.LogoutBtn {
-    background-color: #afc6d2;
-    box-shadow: none;
-
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    border-radius: 8px;
-    margin-left: 10px;
-    font-weight: 600;
-    transition: all 0.2s;
-    box-shadow: 0 2px 4px rgba(96, 93, 87, 0.2);
-
-}
-.LogoutBtn:hover {
-    background-color: #78909c;
-    transform: translateY(-1px);
-}
-
 .ModalOverlay {
     position: fixed;
     top: 0;
