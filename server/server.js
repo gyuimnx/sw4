@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 // const db = require('./db'); // DB 연결 제거
-const authRoutes = require('./routes_auth');
+// const authRoutes = require('./routes_auth');
 const wordbookRoutes = require('./wordbook');
 
 const app = express();
@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 // 인증 라우터 연결 (로그인/회원가입)
-app.use('/api/auth', authRoutes); 
+// app.use('/api/auth', authRoutes); 
 
 // 단어장 라우터 연결 (JWT 토큰 필요)
 app.use('/api/wordbook', wordbookRoutes);
