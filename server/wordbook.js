@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const protect = require('./middleware_auth');
 
 const MOCK_USER_ID = 1;
 
@@ -27,18 +26,16 @@ const isWordOwner = (wordId, userId) => {
     return isChapterOwner(word.chapter_id, userId);
 };
 
-router.use(protect);
-
 // 챕터 목록 조회
 router.get('/chapters', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const userChapters = getChaptersByUserId(user_id);
     res.json({ chapters: userChapters });
 });
 
 // 새 챕터 추가
 router.post('/chapters', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const { name } = req.body;
 
     if (!name) {
@@ -67,7 +64,7 @@ router.post('/chapters', async (req, res) => {
 
 // 챕터의 단어 목록 조회
 router.get('/words/:chapterId', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const { chapterId } = req.params;
 
     if (!isChapterOwner(chapterId, user_id)) {
@@ -80,7 +77,7 @@ router.get('/words/:chapterId', async (req, res) => {
 
 // 단어 추가
 router.post('/words', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const { chapter_id, english, korean } = req.body;
 
     if (!chapter_id || !english || !korean) {
@@ -108,7 +105,7 @@ router.post('/words', async (req, res) => {
 
 // 단어 암기 상태 토글
 router.put('/words/:wordId/toggle', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const wordId = parseInt(req.params.wordId);
 
     const wordIndex = words.findIndex(w => w.word_id === wordId);
@@ -129,7 +126,7 @@ router.put('/words/:wordId/toggle', async (req, res) => {
 
 // 단어 삭제
 router.delete('/words/:wordId', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const wordId = parseInt(req.params.wordId);
 
     const wordIndex = words.findIndex(w => w.word_id === wordId);
@@ -145,7 +142,7 @@ router.delete('/words/:wordId', async (req, res) => {
 
 // 챕터 삭제
 router.delete('/chapters/:chapterId', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const chapterId = parseInt(req.params.chapterId);
 
     const chapterIndex = chapters.findIndex(c => c.chapter_id === chapterId);
@@ -164,7 +161,7 @@ router.delete('/chapters/:chapterId', async (req, res) => {
 
 // 챕터 이름 수정
 router.put('/chapters/:chapterId', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const chapterId = parseInt(req.params.chapterId);
     const { name } = req.body;
 
@@ -192,7 +189,7 @@ router.put('/chapters/:chapterId', async (req, res) => {
 
 // 단어 수정
 router.put('/words/:wordId', async (req, res) => {
-    const user_id = req.user_id;
+    const user_id = 1;
     const wordId = parseInt(req.params.wordId);
     const { english, korean } = req.body;
 
