@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './Chapter.css';
 import ListChapter from "../ListChapter/ListChapter";
-import { Link } from "react-router-dom";
 import api from "../../api";
 
 function Chapter() {
@@ -9,10 +8,7 @@ function Chapter() {
     const [newChapter, setNewChapter] = useState(''); // 새 챕터
     const [createOpen, setCreateOpen] = useState(false); // 새 챕터 만들기 눌렀는가?
 
-    // const navigate = useNavigate();
-    // const username = localStorage.getItem('username');
-
-    // 챕터 목록 조회(DB에서 가져옴)
+    // 챕터 목록 조회
     const fetchChapters = async () => {
         try {
             const response = await api.get('/chapters');
@@ -31,12 +27,12 @@ function Chapter() {
             // 현재 포커스가 입력창인지 확인
             const isInputFocused = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
 
-            // ESC : 모달이 열려있으면 닫기
+            // ESC -> 모달이 열려있으면 닫기
             if (e.key === 'Escape' && createOpen) {
                 setCreateOpen(false);
             }
 
-            // C : 입력 중이 아니고 모달이 닫혀있을 때 열기
+            // C -> 입력 중이 아니고 모달이 닫혀있을 때 열기
             if ((e.key === 'c' || e.key === 'C') && !isInputFocused && !createOpen) {
                 setCreateOpen(true);
             }
@@ -107,12 +103,6 @@ function Chapter() {
             alert(message);
         }
     }
-
-    // const handleLogout = () => {
-    //     localStorage.removeItem('userToken'); // 토큰 제거하고
-    //     localStorage.removeItem('username');
-    //     navigate('/Login'); // 로그인 페이지로 이동
-    // };
 
     // 퀴즈 버튼 클릭 시 실행할 함수
     const handleQuizClick = (e) => {

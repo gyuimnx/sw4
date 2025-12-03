@@ -2,10 +2,8 @@ const express = require('express');
 const router = express.Router();
 const protect = require('./middleware_auth');
 
-// Mock User ID (middleware_auth.js와 동일해야 함)
 const MOCK_USER_ID = 1;
 
-// Seed data (Simulating DB structure)
 let chapters = [
     { chapter_id: 1, user_id: MOCK_USER_ID, name: '기본 단어' },
     { chapter_id: 2, user_id: MOCK_USER_ID, name: '토익 필수' },
@@ -20,7 +18,6 @@ let words = [
 ];
 let nextWordId = 5;
 
-// Helper functions for data access
 const getChaptersByUserId = (userId) => chapters.filter(c => c.user_id === userId);
 const getWordsByChapterId = (chapterId) => words.filter(w => w.chapter_id === parseInt(chapterId));
 const isChapterOwner = (chapterId, userId) => chapters.some(c => c.chapter_id === parseInt(chapterId) && c.user_id === userId);
@@ -30,17 +27,16 @@ const isWordOwner = (wordId, userId) => {
     return isChapterOwner(word.chapter_id, userId);
 };
 
-// 이 라우터의 모든 경로에 JWT 인증 미들웨어를 적용합니다.
 router.use(protect);
 
-// 1. 챕터 목록 조회(GET /api/wordbook/chapters) - Read
+// 챕터 목록 조회
 router.get('/chapters', async (req, res) => {
     const user_id = req.user_id;
     const userChapters = getChaptersByUserId(user_id);
     res.json({ chapters: userChapters });
 });
 
-// 2. 새 챕터 추가(POST /api/wordbook/chapters) - Create
+// 새 챕터 추가
 router.post('/chapters', async (req, res) => {
     const user_id = req.user_id;
     const { name } = req.body;
@@ -49,7 +45,7 @@ router.post('/chapters', async (req, res) => {
         return res.status(400).json({ message: '챕터 이름을 입력해주세요.' });
     }
 
-    // 중복 이름 확인 (대소문자 구분 없이)
+    // 중복 이름 확인
     const normalizedName = name.trim();
     if (getChaptersByUserId(user_id).some(c => c.name.toLowerCase() === normalizedName.toLowerCase())) {
         return res.status(409).json({ message: '이미 같은 이름의 챕터가 있습니다.' });
@@ -69,7 +65,7 @@ router.post('/chapters', async (req, res) => {
     });
 });
 
-// 3. 특정 챕터의 단어 목록 조회 (GET /api/wordbook/words/:chapterId) - Read
+// 챕터의 단어 목록 조회
 router.get('/words/:chapterId', async (req, res) => {
     const user_id = req.user_id;
     const { chapterId } = req.params;
@@ -82,7 +78,7 @@ router.get('/words/:chapterId', async (req, res) => {
     res.json({ words: chapterWords });
 });
 
-// 4. 단어 추가(POST /api/wordbook/words) - Create
+// 단어 추가
 router.post('/words', async (req, res) => {
     const user_id = req.user_id;
     const { chapter_id, english, korean } = req.body;
@@ -110,7 +106,7 @@ router.post('/words', async (req, res) => {
     });
 });
 
-// 5. 단어 암기 상태 토글 (PUT /api/wordbook/words/:wordId/toggle) - Update
+// 단어 암기 상태 토글
 router.put('/words/:wordId/toggle', async (req, res) => {
     const user_id = req.user_id;
     const wordId = parseInt(req.params.wordId);
@@ -131,7 +127,7 @@ router.put('/words/:wordId/toggle', async (req, res) => {
 });
 
 
-// 6. 단어 삭제 (DELETE /api/wordbook/words/:wordId) - Delete
+// 단어 삭제
 router.delete('/words/:wordId', async (req, res) => {
     const user_id = req.user_id;
     const wordId = parseInt(req.params.wordId);
@@ -147,7 +143,7 @@ router.delete('/words/:wordId', async (req, res) => {
 });
 
 
-// 7. 챕터 삭제 (DELETE /api/wordbook/chapters/:chapterId) - Delete
+// 챕터 삭제
 router.delete('/chapters/:chapterId', async (req, res) => {
     const user_id = req.user_id;
     const chapterId = parseInt(req.params.chapterId);
@@ -160,13 +156,13 @@ router.delete('/chapters/:chapterId', async (req, res) => {
 
     // 챕터 삭제
     chapters.splice(chapterIndex, 1);
-    // 해당 챕터의 단어도 모두 삭제
+    // 챕터의 단어 모두 삭제
     words = words.filter(w => w.chapter_id !== chapterId);
 
     res.status(200).json({ message: '챕터가 성공적으로 삭제되었습니다.' });
 });
 
-// 8. 챕터 이름 수정 (PUT /api/wordbook/chapters/:chapterId) - Update
+// 챕터 이름 수정
 router.put('/chapters/:chapterId', async (req, res) => {
     const user_id = req.user_id;
     const chapterId = parseInt(req.params.chapterId);
@@ -184,7 +180,7 @@ router.put('/chapters/:chapterId', async (req, res) => {
     
     const normalizedName = name.trim();
 
-    // 중복 이름 확인 (자신을 제외)
+    // 중복 이름 확인
     if (getChaptersByUserId(user_id).some((c, i) => c.name.toLowerCase() === normalizedName.toLowerCase() && i !== chapterIndex)) {
         return res.status(409).json({ message: '이미 같은 이름의 챕터가 있습니다.' });
     }
@@ -194,7 +190,7 @@ router.put('/chapters/:chapterId', async (req, res) => {
     res.json({ message: '챕터 이름이 수정되었습니다.', newName: normalizedName });
 });
 
-// 9. 단어 수정 (PUT /api/wordbook/words/:wordId) - Update
+// 단어 수정
 router.put('/words/:wordId', async (req, res) => {
     const user_id = req.user_id;
     const wordId = parseInt(req.params.wordId);
